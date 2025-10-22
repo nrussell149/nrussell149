@@ -25,7 +25,7 @@
     PS C:\> .\__remediation_template(STIG-ID-WN11-AU-000500).ps1 
 #>
 
-# YOUR CODE GOES HERE# Define the registry path
+
 $RegPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application"
 
 # Create the key if it does not exist
