@@ -1,0 +1,42 @@
+<#
+.SYNOPSIS
+  This PowerShell script enforces the minimum password age of 1 day by running the 
+  legacy net accounts command through PowerShell using cmd /c for full compatibility on Windows 11.
+
+.NOTES
+    Author          : Nicholas Russell
+    LinkedIn        : linkedin.com/in/nicholas-russell-51a839104//
+    GitHub          : github.com/nrussell149
+    Date Created    : 2025-10-23
+    Last Modified   : 2025-10-23
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-AC-000030
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN11-AC-000030).ps1 
+# Run this PowerShell script as Administrator
+
+# WN11-AC-000030 - Configure Minimum Password Age to 1 day
+$MinPasswordAge = 1
+
+# Use cmd /c to execute the legacy 'net accounts' command correctly from PowerShell
+try {
+    cmd /c "net accounts /minpwage:$MinPasswordAge"
+    Write-Host "Minimum password age successfully set to $MinPasswordAge day." -ForegroundColor Green
+} catch {
+    Write-Warning "Failed to set minimum password age: $_"
+}
+
+# Optional: Display current account policy settings for verification
+Write-Host "`nCurrent Account Policy Settings:"
+cmd /c "net accounts"
