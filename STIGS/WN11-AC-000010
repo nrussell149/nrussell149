@@ -1,0 +1,43 @@
+<#
+.SYNOPSIS
+  PowerShell script to remediate WN11-AC-000010 
+  applies a local security policy that sets the account lockout threshold to 
+  three failed logon attempts by creating and applying a temporary security template through secedit. 
+.
+NOTES
+    Author          : Nicholas Russell
+    LinkedIn        : linkedin.com/in/nicholas-russell-51a839104//
+    GitHub          : github.com/nrussell149
+    Date Created    : 2025-10-22
+    Last Modified   : 2025-10-22
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-AC-000010
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN11-AC-000010).ps1 
+# Run as Administrator
+
+# WN11-AC-000010 - Configure maximum bad logon attempts to 3
+$MaxBadLogonAttempts = 3
+
+try {
+    # Apply the setting using 'net accounts'
+    net accounts /lockoutthreshold:$MaxBadLogonAttempts
+    Write-Host "Maximum bad logon attempts successfully set to $MaxBadLogonAttempts." -ForegroundColor Green
+} catch {
+    Write-Warning "Failed to set maximum bad logon attempts: $_"
+}
+
+# Optional: Display current account policy settings for verification
+Write-Host "`nCurrent Account Policy Settings:"
+net accounts
