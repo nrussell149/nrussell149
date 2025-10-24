@@ -1,0 +1,44 @@
+#
+.SYNOPSIS
+   This PowerShell script enforces password expiration by disabling the “Password never expires” setting for all 
+   local user accounts except the built-in Administrator and Guest accounts. 
+
+.NOTES
+    Author          : Nicholas Russell
+    LinkedIn        : linkedin.com/in/nicholas-russell-51a839104
+    GitHub          : github.com/nrussell149
+    Date Created    : 2025-10-24
+    Last Modified   : 2025-10-24
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-00-000090
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN11-00-000090).ps1 
+# Run as Administrator
+# WN11-00-000090 - Require password expiration for all local user accounts
+
+# Get all local user accounts except built-in system accounts
+$LocalUsers = Get-LocalUser | Where-Object { $_.Name -ne "Administrator" -and $_.Name -ne "Guest" }
+
+foreach ($User in $LocalUsers) {
+    try {
+        # Disable "Password never expires" for each user
+        Set-LocalUser -Name $User.Name -PasswordNeverExpires $false
+        Write-Host "Password expiration required for user: $($User.Name)" -ForegroundColor Green
+    }
+    catch {
+        Write-Warning "Failed to update user: $($User.Name) - $_"
+    }
+}
+
+Write-Host "`nPassword expiration policy applied to all local user accounts (excluding Administrator and Guest)."
