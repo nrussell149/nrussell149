@@ -1,0 +1,48 @@
+<#
+.SYNOPSIS
+    This PowerShell script disables printing over HTTP by setting the 
+     DisableHTTPPrinting registry value to 1 under HKLM\Software\Policies\Microsoft\Windows NT\Printers.
+
+.NOTES
+    Author          : Nicholas Russell
+    LinkedIn        : linkedin.com/in/nicholas-russell-51a839104
+    GitHub          : github.com/nrussell149
+    Date Created    : 2025-10-24
+    Last Modified   : 2025-10-24
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-cc-000110
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN11-CC-000110).ps1 
+#>
+# Run as Administrator
+# WN11-CC-000110 - Disable Printing over HTTP
+
+# Registry path for HTTP printing policy
+$RegPath = "HKLM:\Software\Policies\Microsoft\Windows NT\Printers"
+$ValueName = "DisableHTTPPrinting"
+
+# Ensure the registry key exists
+if (-not (Test-Path -Path $RegPath)) {
+    New-Item -Path $RegPath -Force | Out-Null
+}
+
+# Set DisableHTTPPrinting to 1 (Prevent printing over HTTP)
+New-ItemProperty -Path $RegPath -Name $ValueName -PropertyType DWord -Value 1 -Force | Out-Null
+
+# Verify result
+$CurrentValue = (Get-ItemProperty -Path $RegPath -Name $ValueName).$ValueName
+
+Write-Host "Printing over HTTP has been disabled." -ForegroundColor Green
+Write-Host "$RegPath\$ValueName = $CurrentValue (1 = Disabled)"
+Write-Host "`nRun 'gpupdate /force' or restart for the policy to take effect."
